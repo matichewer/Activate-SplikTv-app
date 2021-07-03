@@ -22,7 +22,7 @@ URL="https://api.telegram.org/bot$TOKEN/sendMessage"
 
 
 sendTelegramMessage(){  
-  curl -s -X POST "$URL" -d chat_id=$ID -d text="$MENSAJE" > /dev/null
+  curl -s -X POST "$URL" -d chat_id="$ID" -d text="$MESSAGE" > /dev/null
 }
 
 #####################################################################################
@@ -38,8 +38,8 @@ CURL_OUTPUT=$(curl --silent 'https://app.spliktv.xyz/activar' \
 # If curl don't return 0, then there was an error in the connection
 if [ $? -ne "0" ]; then 
 
-    MENSAJE="SplikTV: there was an error in curl sentence"
-    echo ${MENSAJE}
+    MESSAGE="SplikTV: there was an error in curl sentence"
+    echo "${MESSAGE}"
     sendTelegramMessage
     exit 1
 
@@ -50,12 +50,12 @@ else
 
     # If grep return 0, there was no error
     if [ $? -eq "0" ]; then
-        MENSAJE="SplikTV: activated"
+        MESSAGE="SplikTV: activated"
     else
-        MENSAJE="SplikTV: connection made but couldn't be activated"
+        MESSAGE="SplikTV: connection made but couldn't be activated"
     fi
 
-    echo ${MENSAJE}
+    echo "${MESSAGE}"
     sendTelegramMessage
 
 fi
