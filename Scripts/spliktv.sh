@@ -14,8 +14,8 @@ PATH_MY_TELEGRAM_ID="${PATH_CONFIG}/my-telegram-id.txt"
 
 
 # Load the config to send messeges with a telegram bot
-. ${PATH_TELEGRAM_BOT_SCRIPT}
-loadTelegramBotConfig ${PATH_TELEGRAM_BOT_TOKEN} ${PATH_MY_TELEGRAM_ID}
+. "${PATH_TELEGRAM_BOT_SCRIPT}"
+loadTelegramBotConfig "${PATH_TELEGRAM_BOT_TOKEN}" "${PATH_MY_TELEGRAM_ID}"
 
 
 

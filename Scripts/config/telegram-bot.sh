@@ -5,7 +5,7 @@
 loadTelegramBotConfig(){
 
     # Read telegram bot token (to send alerts)
-    TOKEN=$(<${1})
+    TOKEN=$(<"${1}")
 
     if [ $? -ne "0" ]; then
       echo "Error: the telegram bot token couldn't be read"
@@ -14,7 +14,7 @@ loadTelegramBotConfig(){
 
 
     # Read my telegram account id (to receive alerts)
-    ID=$(<${2})
+    ID=$(<"${2}")
 
     if [ $? -ne "0" ]; then
       echo "Error: my telegram account id couldn't be read"
