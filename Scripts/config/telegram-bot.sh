@@ -1,10 +1,11 @@
 #!/bin/bash
 
 
+
 loadTelegramBotConfig(){
 
     # Read telegram bot token (to send alerts)
-    TOKEN=$(<${HOME}/Scripts/config/raspberry-telegram-bot-token.txt)
+    TOKEN=$(<${1})
 
     if [ $? -ne "0" ]; then
       echo "Error: the telegram bot token couldn't be read"
@@ -13,7 +14,7 @@ loadTelegramBotConfig(){
 
 
     # Read my telegram account id (to receive alerts)
-    ID=$(<${HOME}/Scripts/config/my-telegram-id.txt)
+    ID=$(<${2})
 
     if [ $? -ne "0" ]; then
       echo "Error: my telegram account id couldn't be read"

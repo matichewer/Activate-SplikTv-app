@@ -1,9 +1,22 @@
 #!/bin/bash
 
 
+####################################### CONFIG PATHS #######################################
+
+PATH_CONFIG="${HOME}/Git/Activate-SplikTv-app/Scripts/config"
+
+PATH_TELEGRAM_BOT_SCRIPT="${PATH_CONFIG}/telegram-bot.sh"
+PATH_TELEGRAM_BOT_TOKEN="${PATH_CONFIG}/telegram-bot-token.txt"
+PATH_MY_TELEGRAM_ID="${PATH_CONFIG}/my-telegram-id.txt"
+
+############################################################################################
+
+
+
 # Load the config to send messeges with a telegram bot
-. ${HOME}/Scripts/config/telegram-raspberry-bot.sh
-loadTelegramBotConfig
+. ${PATH_TELEGRAM_BOT_SCRIPT}
+loadTelegramBotConfig ${PATH_TELEGRAM_BOT_TOKEN} ${PATH_MY_TELEGRAM_ID}
+
 
 
 # Connect to SplikTV web page, to activate
@@ -17,7 +30,7 @@ if [ $? -ne "0" ]; then
 
     MESSAGE="SplikTV: there was an error in curl sentence"
     echo "${MESSAGE}"
-    sendTelegramMessage
+    sendTelegramMessage "${MESSAGE}"
     exit 1
 
 else
@@ -33,6 +46,6 @@ else
     fi
 
     echo "${MESSAGE}"
-    sendTelegramMessage
+    sendTelegramMessage "${MESSAGE}"
 
 fi
