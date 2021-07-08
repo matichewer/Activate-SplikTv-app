@@ -20,10 +20,11 @@ loadTelegramBotConfig "${PATH_TELEGRAM_BOT_TOKEN}" "${PATH_MY_TELEGRAM_ID}"
 
 
 # Connect to SplikTV web page, to activate
-CURL_OUTPUT=$(curl --silent 'https://app.spliktv.xyz/activar' \
-              --data-raw 'submite=Pulsa+aqu%C3%AD+para+activar')
+#CURL_OUTPUT=$(curl --silent 'https://app.spliktv.xyz/activar' \
+#              --data-raw 'submite=Pulsa+aqu%C3%AD+para+activar')
 
-
+CURL_OUTPUT=$(curl --silent 'https://act.spliktv.xyz/' \
+                --data-raw 'submite=Pulsa+aqu%C3%AD+para+activar')
 
 # If curl don't return 0, then there was an error in the connection
 if [ $? -ne "0" ]; then 
