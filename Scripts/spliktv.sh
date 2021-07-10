@@ -1,21 +1,17 @@
 #!/bin/bash
 
 
-####################################### CONFIG PATHS #######################################
+####################################### CONFIG PATH #######################################
 
-PATH_CONFIG="${HOME}/Git/Activate-SplikTv-app/Scripts/config"
+PATH_TELEGRAM_BOT_SCRIPT="${HOME}/Git/Activate-SplikTv-app/Scripts/config/telegram-bot.sh"
 
-PATH_TELEGRAM_BOT_SCRIPT="${PATH_CONFIG}/telegram-bot.sh"
-PATH_TELEGRAM_BOT_TOKEN="${PATH_CONFIG}/telegram-bot-token.txt"
-PATH_MY_TELEGRAM_ID="${PATH_CONFIG}/my-telegram-id.txt"
+###########################################################################################
 
-############################################################################################
 
 
 
 # Load the config to send messeges with a telegram bot
 . "${PATH_TELEGRAM_BOT_SCRIPT}"
-loadTelegramBotConfig "${PATH_TELEGRAM_BOT_TOKEN}" "${PATH_MY_TELEGRAM_ID}"
 
 
 
