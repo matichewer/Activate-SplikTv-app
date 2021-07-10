@@ -3,15 +3,16 @@
 
 ####################################### CONFIG PATH #######################################
 
-PATH_TELEGRAM_BOT_SCRIPT="${HOME}/Git/Activate-SplikTv-app/Scripts/config/telegram-bot.sh"
+
+MY_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+PATH_TELEGRAM_BOT="${MY_PATH}/config/telegram-bot.sh"
 
 ###########################################################################################
 
 
 
-
 # Load the config to send messeges with a telegram bot
-. "${PATH_TELEGRAM_BOT_SCRIPT}"
+. "${PATH_TELEGRAM_BOT}"
 
 
 
