@@ -20,11 +20,22 @@ loadTelegramBotConfig "${PATH_TELEGRAM_BOT_TOKEN}" "${PATH_MY_TELEGRAM_ID}"
 
 
 # Connect to SplikTV web page, to activate
-#CURL_OUTPUT=$(curl --silent 'https://app.spliktv.xyz/activar' \
-#              --data-raw 'submite=Pulsa+aqu%C3%AD+para+activar')
+MY_ID=$(curl --silent --include 'https://app.spliktv.xyz/activar' | grep location | cut --delimiter='=' --fields=2)
 
-CURL_OUTPUT=$(curl --silent 'https://act.spliktv.xyz/' \
+# If curl don't return 0, then there was an error in the connection
+if [ $? -ne "0" ]; then 
+
+    MESSAGE="SplikTV: can't get ID"
+    echo "${MESSAGE}"
+    sendTelegramMessage "${MESSAGE}"
+    exit 1
+fi
+
+LINK="https://activar.spliktv.xyz/?id=$MY_ID=="
+
+CURL_OUTPUT=$(curl "${LINK}" \
                 --data-raw 'submite=Pulsa+aqu%C3%AD+para+activar')
+
 
 # If curl don't return 0, then there was an error in the connection
 if [ $? -ne "0" ]; then 
