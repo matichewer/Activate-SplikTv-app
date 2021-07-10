@@ -33,7 +33,7 @@ fi
 
 LINK="https://activar.spliktv.xyz/?id=$MY_ID=="
 
-CURL_OUTPUT=$(curl "${LINK}" \
+CURL_OUTPUT=$(curl --silent "${LINK}" \
                 --data-raw 'submite=Pulsa+aqu%C3%AD+para+activar')
 
 
