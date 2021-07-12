@@ -3,35 +3,31 @@
 
 ####################################### CONFIG PATH #######################################
 
-
 MY_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+
 PATH_TELEGRAM_BOT="${MY_PATH}/config/telegram-bot.sh"
+# Load the config to send messeges with a telegram bot
+. "${PATH_TELEGRAM_BOT}"
 
 ###########################################################################################
 
 
-
-# Load the config to send messeges with a telegram bot
-. "${PATH_TELEGRAM_BOT}"
-
-
-
 # Connect to SplikTV web page, to activate
-MY_ID=$(curl --silent --include 'https://app.spliktv.xyz/activar' | grep location | cut --delimiter='=' --fields=2)
+MY_LINK=$(curl --silent --include 'https://app.spliktv.xyz/activar' | grep location | cut --delimiter=' ' --fields=2 | tr -d " \t\n\r")
 
 # If curl don't return 0, then there was an error in the connection
 if [ $? -ne "0" ]; then 
 
-    MESSAGE="SplikTV: can't get ID"
+    MESSAGE="SplikTV: can't get the link with my ID"
     echo "${MESSAGE}"
     sendTelegramMessage "${MESSAGE}"
     exit 1
+
 fi
 
-LINK="https://activar.spliktv.xyz/?id=$MY_ID=="
 
-CURL_OUTPUT=$(curl --silent "${LINK}" \
-                --data-raw 'submite=Pulsa+aqu%C3%AD+para+activar')
+CURL_OUTPUT=$(curl --silent ${MY_LINK} --data-raw 'submite=Pulsa+aqu%C3%AD+para+activar')
 
 
 # If curl don't return 0, then there was an error in the connection
@@ -40,6 +36,7 @@ if [ $? -ne "0" ]; then
     MESSAGE="SplikTV: there was an error in curl sentence"
     echo "${MESSAGE}"
     sendTelegramMessage "${MESSAGE}"
+    echo "${MY_LINK}"
     exit 1
 
 else
