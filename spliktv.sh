@@ -20,7 +20,7 @@ if [ $? -ne "0" ]; then
 
     MESSAGE="SplikTV: can't get the link with my ID"
     echo "${MESSAGE}"
-    sendMessage "text:${MESSAGE}"
+    sendMessage "text:${MESSAGE}" > /dev/null
     exit 1
 
 fi
@@ -36,7 +36,7 @@ if [ $? -ne "0" ]; then
     MESSAGE="SplikTV: there was an error in the activation
             ${LINK}"
     echo "${MESSAGE}"
-    sendMessage "text:${MESSAGE}"
+    sendMessage "text:${MESSAGE}" > /dev/null
     exit 1
 
 else
@@ -52,7 +52,7 @@ else
     fi
 
     echo "${MESSAGE}"
-    sendMessage "text:${MESSAGE}"
+    sendMessage "text:${MESSAGE}" > /dev/null
 
 fi
 
