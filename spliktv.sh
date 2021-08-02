@@ -12,54 +12,44 @@ THIS_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 
 
+# Obtengo mi ID y genero el link de activacion
+LINK=$(curl --silent --include                                                 \
+            'https://app.spliktv.xyz/activar'                                  \
+            | grep location                                                    \
+            | cut --delimiter=' ' --fields=2                                   \
+            | tr -d " \t\n\r")
 
-
-# Generate the link with the correct ID to activate
-LINK=$(curl --silent --include 'https://app.spliktv.xyz/activar' | grep location | cut --delimiter=' ' --fields=2 | tr -d " \t\n\r")
-
-# If curl don't return 0, then there was an error in the last sentence
+# Si curl no retorna 0, entonces hubo un error en la generacion del link
 if [ $? -ne "0" ]; then 
-
-    MESSAGE="SplikTV: can't get the link with my ID"
-    echo "${MESSAGE}"
-    sendMessage "text:${MESSAGE}" > /dev/null
-    exit 1
-
+    STATUS="SplikTV: no se pudo generar el link con mi ID"
 fi
 
 
+# Intento activar la app con el link generado previamente
+CURL_OUTPUT=$(curl --silent ${LINK}                                            \
+                --data-raw 'submite=Pulsa+aqu%C3%AD+para+activar')
 
-# Activate SplikTv with the previously generated link
-CURL_OUTPUT=$(curl --silent ${LINK} --data-raw 'submite=Pulsa+aqu%C3%AD+para+activar')
-
-# If curl don't return 0, then there was an error in the connection
+# Si curl no retorna 0, entonces hubo un error en la conexion
 if [ $? -ne "0" ]; then 
-
-    MESSAGE="SplikTV: there was an error in the activation
-            ${LINK}"
-    echo "${MESSAGE}"
-    sendMessage "text:${MESSAGE}" > /dev/null
-    exit 1
-
+    STATUS="SplikTV: link generado correctamente, pero hubo un error en la activacion"
 else
 
-    # Find if it was really activated
+    # Busco si realmente se ha activado
     grep -q 'Activado' <<< "${CURL_OUTPUT}"
 
-    # If grep return 0, there was no error
+    # Si grep() retorna 0, entonces se pudo activar correctamente
     if [ $? -eq "0" ]; then
-        MESSAGE="SplikTV: activated"
-    else        
-        grep -q 'Activaste' <<< "${CURL_OUTPUT}"
+        STATUS="SplikTV: activado correctamente!"
+    else      
+        # Sino, busco si ya habia sido activado previamente  
+        grep -q 'activaste' <<< "${CURL_OUTPUT}"
         if [ $? -eq "0" ]; then
-            MESSAGE="SplikTV: ya habia sido activado"
+            STATUS="SplikTV: ya habia sido activado"
         else
-            MESSAGE="SplikTV: connection made but couldn't be activated"
+            STATUS="SplikTV: conexion realizada pero no se pudo activar"
         fi
     fi
-
-    echo "${MESSAGE}"
-    sendMessage "text:${MESSAGE}" > /dev/null
-
 fi
 
+echo "${STATUS}"
+sendMessage "text:${STATUS}" > /dev/null
