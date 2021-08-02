@@ -12,6 +12,8 @@ THIS_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 
 
+
+
 # Generate the link with the correct ID to activate
 LINK=$(curl --silent --include 'https://app.spliktv.xyz/activar' | grep location | cut --delimiter=' ' --fields=2 | tr -d " \t\n\r")
 
@@ -47,8 +49,13 @@ else
     # If grep return 0, there was no error
     if [ $? -eq "0" ]; then
         MESSAGE="SplikTV: activated"
-    else
-        MESSAGE="SplikTV: connection made but couldn't be activated"
+    else        
+        grep -q 'Activaste' <<< "${CURL_OUTPUT}"
+        if [ $? -eq "0" ]; then
+            MESSAGE="SplikTV: ya habia sido activado"
+        else
+            MESSAGE="SplikTV: connection made but couldn't be activated"
+        fi
     fi
 
     echo "${MESSAGE}"
