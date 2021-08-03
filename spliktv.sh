@@ -14,8 +14,8 @@ THIS_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 # Obtengo link personal de activacion
 LINK=$(curl --silent --include                                                 \
-            'http://live.spliktv.xyz/activar'                                  \
-            | grep "Location"                                                  \
+            'https://app.spliktv.xyz/activar'                                  \
+            | grep "ocation"                                                  \
             | cut --delimiter=' ' --fields=2                                   \
             | tr -d " \t\n\r")
 
@@ -41,10 +41,10 @@ else
     if [ $? -ne "0" ]; then
         # Busco si ya habia sido activado previamente  
         grep -q "Ya activaste" <<< "${CURL_OUTPUT}"
-        if [ $? -eq "0" ]; then
-            STATUS="SplikTV: no requeria activacion, ya lo estaba"
-        else
+        if [ $? -ne "0" ]; then
             STATUS="SplikTV: conexion realizada, pero no se pudo activar, ni estaba activado de antes"
+        else
+            STATUS="SplikTV: no requeria activacion, ya lo estaba"
         fi
     else       
         # En éste punto ya se tiene que haber activado si o si 
@@ -54,3 +54,6 @@ fi
 
 echo "${STATUS}"
 sendMessage "text:${STATUS}" > /dev/null
+
+ 
+curl 'https://app.spliktv.xyz/activar'
