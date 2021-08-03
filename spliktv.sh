@@ -42,7 +42,7 @@ else
         # Busco si ya habia sido activado previamente  
         grep -q "Ya activaste" <<< "${CURL_OUTPUT}"
         if [ $? -eq "0" ]; then
-            STATUS="SplikTV: ya habia sido activado previamente, no requeria activacion"
+            STATUS="SplikTV: no requeria activacion, ya lo estaba"
         else
             STATUS="SplikTV: conexion realizada, pero no se pudo activar, ni estaba activado de antes"
         fi
