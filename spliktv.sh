@@ -14,8 +14,8 @@ THIS_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 # Obtengo mi ID y genero el link de activacion
 LINK=$(curl --silent --include                                                 \
-            'https://app.spliktv.xyz/activar'                                  \
-            | grep location                                                    \
+            'http://live.spliktv.xyz/activar'                                  \
+            | grep 'Location'                                                  \
             | cut --delimiter=' ' --fields=2                                   \
             | tr -d " \t\n\r")
 
