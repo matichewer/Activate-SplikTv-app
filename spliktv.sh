@@ -12,16 +12,16 @@ THIS_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 
 
-# Obtengo mi ID y genero el link de activacion
+# Obtengo link personal de activacion
 LINK=$(curl --silent --include                                                 \
             'http://live.spliktv.xyz/activar'                                  \
-            | grep 'Location'                                                  \
+            | grep "Location"                                                  \
             | cut --delimiter=' ' --fields=2                                   \
             | tr -d " \t\n\r")
 
-# Si curl no retorna 0, entonces hubo un error en la generacion del link
+# Si curl() NO retorna 0, entonces hubo un error en la generacion del link
 if [ $? -ne "0" ]; then 
-    STATUS="SplikTV: no se pudo generar el link con mi ID"
+    STATUS="SplikTV: no se pudo generar el link"
 fi
 
 
@@ -29,25 +29,26 @@ fi
 CURL_OUTPUT=$(curl --silent ${LINK}                                            \
                 --data-raw 'submite=Pulsa+aqu%C3%AD+para+activar')
 
-# Si curl no retorna 0, entonces hubo un error en la conexion
+# Si curl() NO retorna 0, entonces hubo un error en la conexion
 if [ $? -ne "0" ]; then 
-    STATUS="SplikTV: link generado correctamente, pero hubo un error en la activacion"
+    STATUS="SplikTV: link generado, pero no se pudo presionar el boton de activacion"
 else
 
     # Busco si realmente se ha activado
     grep -q 'Activado' <<< "${CURL_OUTPUT}"
 
-    # Si grep() retorna 0, entonces se pudo activar correctamente
-    if [ $? -eq "0" ]; then
-        STATUS="SplikTV: activado correctamente!"
-    else      
-        # Sino, busco si ya habia sido activado previamente  
-        grep -q 'activaste' <<< "${CURL_OUTPUT}"
+    # Si grep() no retorna 0, entonces no se pudo activar
+    if [ $? -ne "0" ]; then
+        # Busco si ya habia sido activado previamente  
+        grep -q "Ya activaste" <<< "${CURL_OUTPUT}"
         if [ $? -eq "0" ]; then
-            STATUS="SplikTV: ya habia sido activado"
+            STATUS="SplikTV: ya habia sido activado previamente, no requeria activacion"
         else
-            STATUS="SplikTV: conexion realizada pero no se pudo activar"
+            STATUS="SplikTV: conexion realizada, pero no se pudo activar, ni estaba activado de antes"
         fi
+    else       
+        # En éste punto ya se tiene que haber activado si o si 
+        STATUS="SplikTV: ACTIVADOOO!"
     fi
 fi
 
