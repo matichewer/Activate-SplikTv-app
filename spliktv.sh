@@ -44,7 +44,7 @@ else
         if [ $? -ne "0" ]; then
             STATUS="SplikTV: conexion realizada, pero no se pudo activar, ni estaba activado de antes"
         else
-            STATUS="SplikTV: no requeria activacion, ya lo estaba"
+            STATUS="SplikTV: no requeria activacion"
         fi
     else       
         # En éste punto ya se tiene que haber activado si o si 
