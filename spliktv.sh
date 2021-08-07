@@ -57,5 +57,4 @@ else
 fi
 
 # Guardo logs
-echo "$(date '+%Y/%m/%d  %H:%M:%S')  ${STATUS}" >> ${LOG}
- 
+echo -e "$(date '+%Y/%m/%d%t%H:%M:%S')\t${STATUS}" >> ${LOG}
