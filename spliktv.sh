@@ -58,3 +58,4 @@ fi
 
 # Guardo logs
 echo -e "$(date '+%Y/%m/%d%t%H:%M:%S')\t${STATUS}" >> ${LOG}
+echo ${STATUS}
