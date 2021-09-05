@@ -22,21 +22,22 @@ saveLog(){
 }
 
 # Obtengo link personal de activacion
-LINK=$(curl                                                                    \
-            --silent                                                           \
-            --include                                                          \
-            'https://app.spliktv.xyz/activar'                                  \
-            | grep "ocation"                                                   \
-            | cut --delimiter=' ' --fields=2                                   \
-            | tr -d " \t\n\r") 
+#LINK=$(curl                                                                    \
+#            --silent                                                           \
+#            --include                                                          \
+#            'https://app.spliktv.xyz/activar'                                  \
+#            | grep "ocation"                                                   \
+#            | cut --delimiter=' ' --fields=2                                   \
+#            | tr -d " \t\n\r") 
 
 # Si curl() NO retorna 0, entonces hubo un error en la generacion del link
-if [ $? -ne "0" ]; then 
-    STATUS="ERROR\tno se pudo generar el link"
-    saveLog
-    exit 1
-fi
+#if [ $? -ne "0" ]; then 
+#    STATUS="ERROR\tno se pudo generar el link"
+#    saveLog
+#    exit 1
+#fi
 
+LINK="https://sv.spliktv.xyz/activar"
 
 # Intento activar la app con el link generado previamente
 CURL_OUTPUT=$(curl                                                             \
