@@ -17,7 +17,7 @@ PATH_LOG="log.txt"
 
 saveLog(){
     # Guardo logs
-    echo -e "$(date '+%Y/%m/%d%t%H:%M:%S')\t${STATUS}" >> ${PATH_LOG}
+    echo -e "$(date '+%Y/%m/%d,%H:%M:%S'),${STATUS}" >> ${PATH_LOG}
     echo -e "${STATUS}"
 }
 
@@ -32,7 +32,7 @@ saveLog(){
 
 # Si curl() NO retorna 0, entonces hubo un error en la generacion del link
 #if [ $? -ne "0" ]; then 
-#    STATUS="ERROR\tno se pudo generar el link"
+#    STATUS="ERROR,no se pudo generar el link"
 #    saveLog
 #    exit 1
 #fi
@@ -47,7 +47,7 @@ CURL_OUTPUT=$(curl                                                             \
 
 # Si curl() NO retorna 0, entonces hubo un error en la conexion
 if [ $? -ne "0" ]; then 
-    STATUS="ERROR\tlink generado, pero no se pudo presionar el boton de activacion"
+    STATUS="ERROR,link generado pero no se pudo presionar el boton de activacion"
     saveLog
     exit 1
 else
@@ -60,15 +60,15 @@ else
         # Busco si ya habia sido activado previamente  
         grep -q "Ya activaste" <<< "${CURL_OUTPUT}"
         if [ $? -ne "0" ]; then
-            STATUS="ERROR\tconexion realizada, pero no se pudo activar ni tampoco estaba activado"
+            STATUS="ERROR,conexion realizada pero no se pudo activar ni tampoco estaba activado"
             saveLog
             exit 1
         else
-            STATUS="OK\tno requeria activacion, ya lo estaba"
+            STATUS="OK,ya estaba activado"
         fi
     else       
         # En éste punto ya se tiene que haber activado si o si 
-        STATUS="OK\tactivado"        
+        STATUS="OK,activado"        
         #sendMessage "text:SplikTV: ${STATUS}" > /dev/null
     fi
 fi
