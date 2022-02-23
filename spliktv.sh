@@ -76,3 +76,12 @@ fi
 # Si la ejecucion llega a éste punto, entonces no hubo ningun error
 saveLog
 
+
+# Genero el grafico
+python plotting.py
+
+# Copio el grafico a la carpeta de nginx
+cp spliktv_activacion.html /var/www/html/
+
+
+
