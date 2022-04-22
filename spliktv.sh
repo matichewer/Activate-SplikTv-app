@@ -1,45 +1,15 @@
 #!/bin/bash
 
-
-####################################### CONFIG PATH #######################################
-
-#THIS_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-
-# Load the config to use the telegram bot
-#. "${THIS_PATH}/TelegramBashBotsFramework/tbb.sh"
-
-# Logs
-#LOG="${THIS_PATH}/log.txt"
-
-###########################################################################################
-
+LINK="https://sv.spliktv.xyz/activar"
 PATH_LOG="log.txt"
 
 saveLog(){
-    # Guardo logs
     echo -e "$(date '+%Y/%m/%d,%H:%M:%S'),${STATUS}" >> ${PATH_LOG}
     echo -e "${STATUS}"
 }
 
-# Obtengo link personal de activacion
-#LINK=$(curl                                                                    \
-#            --silent                                                           \
-#            --include                                                          \
-#            'https://app.spliktv.xyz/activar'                                  \
-#            | grep "ocation"                                                   \
-#            | cut --delimiter=' ' --fields=2                                   \
-#            | tr -d " \t\n\r") 
 
-# Si curl() NO retorna 0, entonces hubo un error en la generacion del link
-#if [ $? -ne "0" ]; then 
-#    STATUS="ERROR,no se pudo generar el link"
-#    saveLog
-#    exit 1
-#fi
-
-LINK="https://sv.spliktv.xyz/activar"
-
-# Intento activar la app con el link generado previamente
+# Intento activar la app
 CURL_OUTPUT=$(curl                                                             \
                 --silent                                                       \
                 "${LINK}"                                                      \
@@ -57,6 +27,7 @@ else
 
     # Si grep() no retorna 0, entonces no se pudo activar
     if [ $? -ne "0" ]; then
+
         # Busco si ya habia sido activado previamente  
         grep -q "Ya activaste" <<< "${CURL_OUTPUT}"
         if [ $? -ne "0" ]; then
@@ -66,22 +37,21 @@ else
         else
             STATUS="OK,ya estaba activado"
         fi
-    else       
+    else
+
         # En éste punto ya se tiene que haber activado si o si 
         STATUS="OK,activado"        
-        #sendMessage "text:SplikTV: ${STATUS}" > /dev/null
     fi
 fi
+
 
 # Si la ejecucion llega a éste punto, entonces no hubo ningun error
 saveLog
 
-
-# Genero el grafico
-python plotting.py
-
-# Copio el grafico a la carpeta de nginx
-cp spliktv_activacion.html /var/www/html/
-
+# Si puede activar, entonces genero el grafico y lo actualizo en nginx
+if [[ "$STATUS" == "OK,activado" ]]; then
+    python plotting.py
+    cp spliktv_activacion.html /var/www/html/
+fi
 
 
