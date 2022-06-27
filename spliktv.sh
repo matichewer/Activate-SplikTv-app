@@ -23,14 +23,16 @@ if [ $? -ne "0" ]; then
 else
 
     # Busco si realmente se ha activado
-    grep -q 'Activado' <<< "${CURL_OUTPUT}"
+    grep -q "Activado" <<< "${CURL_OUTPUT}"
+    ACTIVADO=$?
 
     # Si grep() no retorna 0, entonces no se pudo activar
-    if [ $? -ne "0" ]; then
+    if [ ${ACTIVADO} -ne 0 ]; then
 
         # Busco si ya habia sido activado previamente  
         grep -q "Ya activaste" <<< "${CURL_OUTPUT}"
-        if [ $? -ne "0" ]; then
+        YA_ACTIVASTE=$?
+        if [ ${YA_ACTIVASTE} -ne 0 ]; then
             STATUS="ERROR,conexion realizada pero no se pudo activar ni tampoco estaba activado"
             saveLog
             exit 1
@@ -38,11 +40,22 @@ else
             STATUS="OK,ya estaba activado"
         fi
     else
-
         # En éste punto ya se tiene que haber activado si o si 
         STATUS="OK,activado"        
     fi
 fi
+
+
+# Por si no permite efectivamente activar por no abrir anuncios.
+# Error completo: "Acción denegada. Violación en el uso de funciones de la app.""
+grep -q "denegad"  <<< "${CURL_OUTPUT}"
+DENEGADO=$?
+if [ ${DENEGADO} -eq 0 ]; then
+    STATUS="ERROR,accion denegada por no abrir anuncios"
+    saveLog
+    exit 1
+fi
+
 
 
 # Si la ejecucion llega a éste punto, entonces no hubo ningun error
@@ -53,5 +66,4 @@ if [[ "$STATUS" == "OK,activado" ]]; then
     python plotting.py
     cp spliktv_activacion.html /var/www/html/
 fi
-
 
