@@ -1,7 +1,7 @@
 #!/bin/bash
 
 LINK="https://sv.spliktv.xyz/activar"
-PATH_LOG="log.txt"
+PATH_LOG="/spliktv/logs/spliktv.log"
 
 saveLog(){
     echo -e "$(date '+%Y/%m/%d,%H:%M:%S'),${STATUS}" >> ${PATH_LOG}
@@ -42,7 +42,7 @@ CURL_OUTPUT=$(curl 'https://sv.spliktv.xyz/activar' \
 
 
 # Si curl() NO retorna 0, entonces hubo un error en la conexion
-if [ $? -ne "0" ]; then 
+if [ $? -ne "0" ]; then
     STATUS="ERROR,link generado pero no se pudo presionar el boton de activacion"
     saveLog
     exit 1
@@ -55,7 +55,7 @@ else
     # Si grep() no retorna 0, entonces no se pudo activar
     if [ ${ACTIVADO} -ne 0 ]; then
 
-        # Busco si ya habia sido activado previamente  
+        # Busco si ya habia sido activado previamente
         grep -q "Ya activaste" <<< "${CURL_OUTPUT}"
         YA_ACTIVASTE=$?
         if [ ${YA_ACTIVASTE} -ne 0 ]; then
@@ -66,8 +66,8 @@ else
             STATUS="OK,ya estaba activado"
         fi
     else
-        # En éste punto ya se tiene que haber activado si o si 
-        STATUS="OK,activado"        
+        # En éste punto ya se tiene que haber activado si o si
+        STATUS="OK,activado"
     fi
 fi
 
@@ -89,7 +89,6 @@ saveLog
 
 # Si puede activar, entonces genero el grafico y lo actualizo en nginx
 if [[ "$STATUS" == "OK,activado" ]]; then
-    python plotting.py
-    cp spliktv_activacion.html /var/www/html/
+    /usr/local/bin/python3 /spliktv/activate-app/plotting.py
 fi
 

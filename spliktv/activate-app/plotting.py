@@ -14,7 +14,7 @@ from bokeh.models import HoverTool, ColumnDataSource
 nombre_de_columnas = ["Fecha","Hora","Estado","Descripcion"]
 
 # leo el log parseando fecha y hora
-df = pandas.read_csv("log.txt",
+df = pandas.read_csv("/spliktv/logs/spliktv.log",
                      names = nombre_de_columnas,
                      parse_dates = ["Fecha","Hora"]
 )
@@ -32,7 +32,7 @@ fig = figure(
         tools="pan,wheel_zoom,save,reset" # elijo los botones del costado a mostrar
     )
 # seteo que por defecto este activado wheelzoom (hacer zoom con la ruedita del mouse)
-fig.toolbar.active_scroll = fig.select_one(WheelZoomTool) 
+fig.toolbar.active_scroll = fig.select_one(WheelZoomTool)
 
 # formateo eje X
 fig.xaxis.formatter=DatetimeTickFormatter(
@@ -55,7 +55,7 @@ fig.yaxis.formatter=DatetimeTickFormatter(
 fig.xaxis[0].ticker.desired_num_ticks = 15
 fig.yaxis[0].ticker.desired_num_ticks = 15
 
-# seteo tema 
+# seteo tema
 temas = ['caliber','dark_minimal', 'light_minimal']
 curdoc().theme = temas[1]
 
@@ -87,7 +87,7 @@ fig.circle(x='Fecha', y='Hora',
 )
 
 # exporto el html
-output_file("spliktv_activacion.html")
+output_file("/spliktv/website/index.html")
 
 # guardo el grafico
 save(fig)

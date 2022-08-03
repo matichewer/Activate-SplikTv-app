@@ -1,0 +1,19 @@
+version: '3.9'
+services:
+  apache:
+    image: httpd:2.4.54
+    container_name: plotting
+    ports:
+    - '8081:80'
+    volumes:
+    - ./spliktv/website:/usr/local/apache2/htdocs
+  spliktv:
+    build: ./spliktv
+    command: python3 /spliktv/activate-app/spliktv.py
+    container_name: spliktv
+    environment:
+      - SLEEP_TIME=600
+    depends_on:
+      - apache
+    volumes:
+    - ./spliktv:/spliktv
